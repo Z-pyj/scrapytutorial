@@ -86,6 +86,7 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+# 键名是Pipeline的类名，键值调用优先级，数字越小，对应的Pipeline越先被调用
 ITEM_PIPELINES = {
     'scrapytutorial.pipelines.TextPipeline':300,
     'scrapytutorial.pipelines.MongoDBPipeline':400

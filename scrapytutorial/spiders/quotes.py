@@ -18,8 +18,19 @@ class QuotesSpider(scrapy.Spider):
             item['text'] = quote.css('.text::text').extract_first()
             item['author'] = quote.css('.author::text').extract_first()
             item['tags'] = quote.css('.tags .tag::text').extract()
+            # 字段赋值给item并返回item
             yield item
-
+        # 获取下一页的地址
         next = response.css('.pager .next a::attr("href")').extract_first()
+        # 拼接下一页的地址
         url = response.urljoin(next)
+        # 执行的命令
+        '''
+        1. 控制台输出：scrapy crawl quotes
+        2. 每个item以后json：scrapy crawl quotes -o quotes.jl
+        3. 输入到json文件中：scrapy crawl quotes -o quotes.json
+
+        '''
+        # 构造一个全新的Request，回调方法使用parse方法，这个Requst方法执行完成后，Response会重新经过
+        # parsse方法处理，得到第二页的解析结果，直到最后一页
         yield scrapy.Request(url=url, callback=self.parse)
