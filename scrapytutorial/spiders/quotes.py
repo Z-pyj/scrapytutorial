@@ -4,8 +4,11 @@ from scrapytutorial.items import QuoteItem
 
 
 class QuotesSpider(scrapy.Spider):
+    # 爬虫名，启动爬虫时需要的参数必须
     name = 'quotes'
+    # 爬取域范围，允许爬虫在这个域名下进行爬取（可选）
     allowed_domains = ['quotes.toscrape.com']
+    # 起始url列表，爬虫执行后第一批请求，将从这个列表中获取
     start_urls = ['https://quotes.toscrape.com/']
 
     def parse(self, response):
