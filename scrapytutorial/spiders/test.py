@@ -48,3 +48,4 @@ Selector(text=sample).css('a[href*=image] img::attr(src)').getall()
 # foo::text 如果 foo 元素存在，但不包含文本（即文本为空）
 # 这意味着 .css('foo::text').get() 即使元素存在，也无法返回“无”。使用 default='' 如果您总是想要字符串：
 # a::attr(href) 选择 href 子链接的属性值
+
