@@ -5,25 +5,9 @@
 
 
 # useful for handling different item types with a single interface
+import pymongo
 from itemadapter import ItemAdapter
 
-from scrapy.exceptions import DropItem
-import pymongo
-
-
-class TextPipeline(object):
-    def __init__(self):
-        self.limit = 50
-
-    # 判断文本长度，超过50用...拼接,每个item都会执行这个方法
-    def process_item(self, item, spider):
-        if item['text']:
-            if len(item['text']) > self.limit:
-                item['text'] = item['text'][0:self.limit].rstrip() + '...'
-            return item
-        # 文本不存在抛出DropItem异常
-        else:
-            return DropItem('Missing Text')
 
 
 # 处理后的item存入MongoDB
@@ -55,3 +39,4 @@ class MongoDBPipeline(object):
     # 当spider被关闭时被调用，将数据库链接关闭
     def close_spider(self, spider):
         self.client.close()
+
