@@ -11,7 +11,7 @@ class ExpertsinfoSpider(scrapy.Spider):
 
     def parse(self, response):
         expert_list = response.css('.expertsList_items .item')
-        index_num = response.css('.page-tab-tog .totle::text').get()[1:-1]
+        index_num = response.css('.page-tab-tog .totle::text').get()[1:-2]
         print(index_num)
 
         if self.index > int(index_num):
