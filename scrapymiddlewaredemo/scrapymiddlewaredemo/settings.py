@@ -1,4 +1,4 @@
-# Scrapy settings for ydlexperts project
+# Scrapy settings for scrapymiddlewaredemo project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -7,14 +7,14 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'ydlexperts'
+BOT_NAME = 'scrapymiddlewaredemo'
 
-SPIDER_MODULES = ['ydlexperts.spiders']
-NEWSPIDER_MODULE = 'ydlexperts.spiders'
+SPIDER_MODULES = ['scrapymiddlewaredemo.spiders']
+NEWSPIDER_MODULE = 'scrapymiddlewaredemo.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'ydlexperts (+http://www.yourdomain.com)'
+#USER_AGENT = 'scrapymiddlewaredemo (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -45,13 +45,17 @@ ROBOTSTXT_OBEY = True
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'ydlexperts.middlewares.YdlexpertsSpiderMiddleware': 543,
+#    'scrapymiddlewaredemo.middlewares.ScrapymiddlewaredemoSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-   'ydlexperts.middlewares.YdlexpertsDownloaderMiddleware': 543,
+   'scrapymiddlewaredemo.middlewares.RandomUserAgentMiddleware': 543,
+   # 'scrapymiddlewaredemo.middlewares.ProxyMiddleware': 544,
+
+   'scrapymiddlewaredemo.middlewares.ChangeResponseMiddleware': 545,
+
 }
 
 # Enable or disable extensions
@@ -63,7 +67,7 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 #ITEM_PIPELINES = {
-#    'ydlexperts.pipelines.YdlexpertsPipeline': 300,
+#    'scrapymiddlewaredemo.pipelines.ScrapymiddlewaredemoPipeline': 300,
 #}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -86,9 +90,3 @@ DOWNLOADER_MIDDLEWARES = {
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
-ITEM_PIPELINES = {
-    # 'scrapytutorial.pipelines.TextPipeline':300,
-    'ydlexperts.pipelines.MongoDBPipeline':400
-}
-MONGODB_CONNECTION_STRING = 'localhost'
-MONGODB_DATABASE = 'ydlexperts'
