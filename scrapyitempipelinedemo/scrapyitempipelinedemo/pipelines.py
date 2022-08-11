@@ -22,6 +22,7 @@ class MongoDBPipeline(object):
         cls.connection_string = crawler.settings.get('MONGODB_CONNECTION_STRING')
         cls.database = crawler.settings.get('MONGODB_DATABASE')
         cls.collection = crawler.settings.get('MONGODB_COLLECTION')
+        return cls()
 
     # 当spider被开启时，被调用，主要进行一些初始化操作
     def open_spider(self, spider):
@@ -75,7 +76,7 @@ class ImagePipeline(ImagesPipeline):
         return file_name
 
     def item_completed(self, results, item, info):
-        image_paths = [x['path'] for x in results if ok]
+        image_paths = [x['path'] for ok, x in results if ok]
         if not image_paths:
             raise DropItem('Image Downloaded Failed')
         return item
