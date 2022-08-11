@@ -1,11 +1,12 @@
 from scrapy import Request, Spider
-from scrapyitempipelinedemo.scrapyitempipelinedemo.items import MovieItem
+from scrapyitempipelinedemo.items import MovieItem
+
 
 class ScrapeSpider(Spider):
     name = 'scrape'
     allowed_domains = ['ssr1.scrape.center']
     base_url = 'https://ssr1.scrape.center'
-    max_page = 10
+    max_page = 1
 
     def start_requests(self):
         for i in range(1, self.max_page + 1):
@@ -25,6 +26,25 @@ class ScrapeSpider(Spider):
         item['categories'] = response.css('.category span::text').getall()
         item['score'] = response.css('.score::text').get()
         item['drama'] = response.css('.drama p::text').get()
-        item['directors'] = response.css('.director .el-card__body .name::text').getall()
-        item['actors'] = response.css('.actor .el-card__body .name::text').getall()
+        # 导演
+        item['directors'] = []
+        directors = response.css('.director .el-card__body')
+        for director in directors:
+            director_image = director.css('img').attrib['src']
+            director_name = director.css('.name::text').get()
+            item['directors'].append({
+                'name': director_name,
+                'image': director_image
+            })
+        # 演员
+        item['actors'] = []
+        actors = response.css('.actor .el-card__body')
+        for actor in actors:
+            actor_name = actor.css('.name::text').get()
+            actor_image = actor.css('img').attrib['src']
+            item['actors'].append({
+                'name': actor_name,
+                'image': actor_image
+            })
 
+        yield item
