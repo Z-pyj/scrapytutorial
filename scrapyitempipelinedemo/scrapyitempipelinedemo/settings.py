@@ -90,10 +90,10 @@ MONGODB_CONNECTION_STRING = 'mongodb://localhost:27017'
 MONGODB_DATABASE = 'movies'
 MONGODB_COLLECTION = 'movies'
 
-ELASTICSEARCH_CONNECTION_STRING = os.getenv('ELASTICSEARCH_CONNECTION_STRING')
+ELASTICSEARCH_CONNECTION_STRING = 'http://localhost:9200/'
 ELASTICSEARCH_INDEX = 'movies'
 
-JMAGES_STORE = './image'
+IMAGES_STORE = './images'
 
 ITEM_PIPELINES = {
     'scrapyitempipelinedemo.pipelines.ImagePipeline': 300,

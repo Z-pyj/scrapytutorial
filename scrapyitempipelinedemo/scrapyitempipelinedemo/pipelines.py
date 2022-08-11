@@ -55,7 +55,7 @@ class ElasticsearchPipeline(object):
 
     # 当spider被开启时，被调用，主要进行一些初始化操作
     def open_spider(self, spider):
-        self.conn = Elasticsearch(self.connection_string)
+        self.conn = Elasticsearch([self.connection_string])
         if not self.conn.indices.exists(self.index):
             self.conn.indices.create(index=self.index)
 
@@ -68,7 +68,7 @@ class ElasticsearchPipeline(object):
 
 
 class ImagePipeline(ImagesPipeline):
-    def file_path(self, request, response=None, info=None, *, item=None):
+    def file_path(self, request, response=None, info=None):
         movie = request.meta['movie']
         type = request.meta['type']
         name = request.meta['name']
@@ -82,7 +82,7 @@ class ImagePipeline(ImagesPipeline):
         return item
 
     def get_media_requests(self, item, info):
-        for director in item['director']:
+        for director in item['directors']:
             director_name = director['name']
             director_image = director['image']
             yield Request(director_image, meta={
@@ -91,7 +91,7 @@ class ImagePipeline(ImagesPipeline):
                 'movie': item['name']
             })
 
-        for actor in item['actor']:
+        for actor in item['actors']:
             actor_name = actor['name']
             actor_image = actor['image']
             yield Request(actor_image, meta={
