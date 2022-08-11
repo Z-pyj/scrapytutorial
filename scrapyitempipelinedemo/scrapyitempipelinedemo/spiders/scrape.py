@@ -1,4 +1,5 @@
 from scrapy import Request, Spider
+
 from scrapyitempipelinedemo.items import MovieItem
 
 
@@ -6,7 +7,7 @@ class ScrapeSpider(Spider):
     name = 'scrape'
     allowed_domains = ['ssr1.scrape.center']
     base_url = 'https://ssr1.scrape.center'
-    max_page = 1
+    max_page = 2
 
     def start_requests(self):
         for i in range(1, self.max_page + 1):
@@ -14,37 +15,33 @@ class ScrapeSpider(Spider):
             yield Request(url, callback=self.parse_index)
 
     def parse_index(self, response):
-        node_list = response.css('.el-card')
-        for node in node_list:
-            href = node.css('.name::attr(href)').get()
+        for item in response.css('.item'):
+            href = item.css('.name::attr(href)').extract_first()
             url = response.urljoin(href)
             yield Request(url, callback=self.parse_detail)
 
     def parse_detail(self, response):
         item = MovieItem()
-        item['name'] = response.css('.m-b-sm::text').get()
-        item['categories'] = response.css('.category span::text').getall()
-        item['score'] = response.css('.score::text').get()
-        item['drama'] = response.css('.drama p::text').get()
-        # 导演
+        item['name'] = response.xpath('//div[contains(@class, "item")]//h2/text()').extract_first()
+        item['categories'] = response.xpath('//button[contains(@class, "category")]/span/text()').extract()
+        item['score'] = response.css('.score::text').re_first('[\d\.]+')
+        item['drama'] = response.css('.drama p::text').extract_first().strip()
         item['directors'] = []
-        directors = response.css('.director .el-card__body')
+        directors = response.xpath('//div[contains(@class, "directors")]//div[contains(@class, "director")]')
         for director in directors:
-            director_image = director.css('img').attrib['src']
-            director_name = director.css('.name::text').get()
+            director_image = director.xpath('.//img[@class="image"]/@src').extract_first()
+            director_name = director.xpath('.//p[contains(@class, "name")]/text()').extract_first()
             item['directors'].append({
                 'name': director_name,
                 'image': director_image
             })
-        # 演员
         item['actors'] = []
-        actors = response.css('.actor .el-card__body')
+        actors = response.css('.actors .actor')
         for actor in actors:
-            actor_name = actor.css('.name::text').get()
-            actor_image = actor.css('img').attrib['src']
+            actor_image = actor.css('.actor .image::attr(src)').extract_first()
+            actor_name = actor.css('.actor .name::text').extract_first()
             item['actors'].append({
                 'name': actor_name,
                 'image': actor_image
             })
-
         yield item
